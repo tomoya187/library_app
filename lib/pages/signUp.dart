@@ -7,9 +7,14 @@ void main() {
   runApp(const signUp());
 }
 
-class signUp extends StatelessWidget {
+class signUp extends StatefulWidget {
   const signUp({Key? key}) : super(key: key);
 
+  @override
+  State<signUp> createState() => _signUpState();
+}
+
+class _signUpState extends State<signUp> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -23,11 +28,17 @@ class signUp extends StatelessWidget {
   }
 }
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
+  @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
   double getSmallDiameter(BuildContext context) =>
       MediaQuery.of(context).size.width * 2 / 3;
+
   double getBigDiameter(BuildContext context) =>
       MediaQuery.of(context).size.width * 7 / 8;
 
