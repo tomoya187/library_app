@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:library_app/pages/signIn.dart';
-
+import 'package:email_validator/email_validator.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,6 +55,7 @@ class _MainPageState extends State<MainPage> {
   TextEditingController _emailControllerConfirm = TextEditingController();
   TextEditingController _passwordControllerConfirm = TextEditingController();
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,35 +76,44 @@ class _MainPageState extends State<MainPage> {
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 25),
                   child: Column(
                     children:  <Widget>[
-                      TextField(
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                            icon: const Icon(
-                              Icons.email,
-                              color: Colors.black,
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.grey.shade100 )),
-                            labelText: "Email",
-                            enabledBorder: InputBorder.none,
-                            labelStyle: const TextStyle(color: Colors.black)),
-                      ),
-                      TextField(
-                        controller: _emailControllerConfirm,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                            icon: const Icon(
-                              Icons.email,
-                              color: Colors.black,
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(width: 3,color: Colors.grey.shade100)),
-                            labelText: "Confirm Email",
-                            enabledBorder: InputBorder.none,
-                            labelStyle: const TextStyle(color: Colors.black)),
+                      Form(
+                        autovalidateMode: AutovalidateMode.always,
 
+                        child: TextFormField(
+                          validator: (value) => EmailValidator.validate(value!) ? null : "Please enter a valid email",
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                              icon: const Icon(
+                                Icons.email,
+                                color: Colors.black,
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Colors.grey.shade100 )),
+                              labelText: "Email",
+                              enabledBorder: InputBorder.none,
+                              labelStyle: const TextStyle(color: Colors.black)),
+                        ),
+                      ),
+                      Form(
+                        autovalidateMode: AutovalidateMode.always,
+                        child: TextFormField(
+                          validator: (value) => EmailValidator.validate(value!) ? null : "Please enter a valid email",
+                          controller: _emailControllerConfirm,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                              icon: const Icon(
+                                Icons.email,
+                                color: Colors.black,
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                  BorderSide(width: 3,color: Colors.grey.shade100)),
+                              labelText: "Confirm Email",
+                              enabledBorder: InputBorder.none,
+                              labelStyle: const TextStyle(color: Colors.black)),
+
+                        ),
                       ),
                       TextField(
                         controller: _passwordController,
@@ -149,6 +159,15 @@ class _MainPageState extends State<MainPage> {
                         width: MediaQuery.of(context).size.width * 0.5,
                         height: 40,
                         child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              gradient: const LinearGradient(
+                                  colors: [
+                                    Colors.black,//Come back to this
+                                    Colors.black
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter)),
                           child: Material(
                             borderRadius: BorderRadius.circular(20),
                             color: Colors.transparent,
@@ -157,11 +176,16 @@ class _MainPageState extends State<MainPage> {
                               splashColor: Colors.amber,
                               onTap: () {//Confirm that both email and password fields match and then do firebase
                                 if(_emailController.text == _emailControllerConfirm.text && _passwordController.text == _passwordControllerConfirm.text){
-                                  FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailController.text, 
-                                      password: _passwordController.text);
+                                  if(_emailController.text.isNotEmpty || _passwordController.text.isNotEmpty) {//ensure fields arent empty
+                                    FirebaseAuth.instance
+                                        .createUserWithEmailAndPassword(
+                                        email: _emailController.text,
+                                        password: _passwordController.text);
 
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) => signIn()));
+                                    Navigator.push(context,
+                                        MaterialPageRoute(
+                                            builder: (context) => signIn()));
+                                  }
                                 }
 
                               },
@@ -175,15 +199,6 @@ class _MainPageState extends State<MainPage> {
                               ),
                             ),
                           ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              gradient: const LinearGradient(
-                                  colors: [
-                                    Colors.black,//Come back to this
-                                    Colors.black
-                                  ],
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter)),
                         ),
                       ),
                     ],
