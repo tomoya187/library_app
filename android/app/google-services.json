@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "982795698673",
+    "project_id": "libraryapp-1d278",
+    "storage_bucket": "libraryapp-1d278.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:982795698673:android:72316d7ff0ac71975a8450",
+        "android_client_info": {
+          "package_name": "com.baker.jeff.library_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "982795698673-jv849neubqt5phpvei06r3r5f7jjq819.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJWG_uZLk407xcxkiwiF6x7Qd1CwoaQ-I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "982795698673-jv849neubqt5phpvei06r3r5f7jjq819.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
