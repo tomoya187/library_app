@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:library_app/pages/signIn.dart';
 
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+
+
+
   runApp(const signUp());
 }
 
@@ -42,6 +50,11 @@ class _MainPageState extends State<MainPage> {
   double getBigDiameter(BuildContext context) =>
       MediaQuery.of(context).size.width * 7 / 8;
 
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _emailControllerConfirm = TextEditingController();
+  TextEditingController _passwordControllerConfirm = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,6 +76,7 @@ class _MainPageState extends State<MainPage> {
                   child: Column(
                     children:  <Widget>[
                       TextField(
+                        controller: _emailController,
                         decoration: InputDecoration(
                             icon: const Icon(
                               Icons.email,
@@ -76,6 +90,7 @@ class _MainPageState extends State<MainPage> {
                             labelStyle: const TextStyle(color: Colors.black)),
                       ),
                       TextField(
+                        controller: _emailControllerConfirm,
                         obscureText: true,
                         decoration: InputDecoration(
                             icon: const Icon(
@@ -91,6 +106,7 @@ class _MainPageState extends State<MainPage> {
 
                       ),
                       TextField(
+                        controller: _passwordController,
                         obscureText: true,
                         decoration: InputDecoration(
                             icon: const Icon(
@@ -106,6 +122,7 @@ class _MainPageState extends State<MainPage> {
 
                       ),
                       TextField(
+                        controller: _passwordControllerConfirm,
                         obscureText: true,
                         decoration: InputDecoration(
                             icon: const Icon(
@@ -138,7 +155,16 @@ class _MainPageState extends State<MainPage> {
                             child: InkWell(
                               borderRadius: BorderRadius.circular(20),
                               splashColor: Colors.amber,
-                              onTap: () {},
+                              onTap: () {//Confirm that both email and password fields match and then do firebase
+                                if(_emailController.text == _emailControllerConfirm.text && _passwordController.text == _passwordControllerConfirm.text){
+                                  FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailController.text, 
+                                      password: _passwordController.text);
+
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) => signIn()));
+                                }
+
+                              },
                               child: const Center(
                                 child: Text(
                                   "SIGN UP",
