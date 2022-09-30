@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
-import 'package:library_app/pages/signIn.dart';
+import 'package:library_app/pages/userBooks.dart';
 import 'package:email_validator/email_validator.dart';
 
 void main() async{
@@ -184,7 +184,7 @@ class _MainPageState extends State<MainPage> {
 
                                     Navigator.push(context,
                                         MaterialPageRoute(
-                                            builder: (context) => signIn()));
+                                            builder: (context) => userBooks()));
                                   }
                                 }
 

@@ -3,7 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:library_app/pages/SignUp.dart';
+import 'package:library_app/pages/userBooks.dart';
 import 'package:library_app/pages/ForgotPassword.dart';
+import 'package:library_app/services/auth.dart';
 
 
 void main() {
@@ -56,6 +58,9 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+
+  final AuthService _auth = AuthService();
+
   double getSmallDiameter(BuildContext context) =>
       MediaQuery
           .of(context)
@@ -170,6 +175,15 @@ class _MainPageState extends State<MainPage> {
                             .width * 0.5,
                         height: 40,
                         child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              gradient: const LinearGradient(
+                                  colors: [
+                                    Colors.black, //Come back to this
+                                    Colors.black
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter)),
                           child: Material(
                             borderRadius: BorderRadius.circular(20),
                             color: Colors.transparent,
@@ -182,7 +196,7 @@ class _MainPageState extends State<MainPage> {
                                 User? user = await loginUsingEmailPassword(email: _emailController.text, password: _passwordController.text, context: context);
                                 print(user);
                                 if(user != null){
-                                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> signUp()));
+                                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> const userBooks()));
                                 }
 
 
@@ -197,15 +211,6 @@ class _MainPageState extends State<MainPage> {
                               ),
                             ),
                           ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              gradient: const LinearGradient(
-                                  colors: [
-                                    Colors.black, //Come back to this
-                                    Colors.black
-                                  ],
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter)),
                         ),
                       ),
                       FloatingActionButton(
@@ -232,12 +237,49 @@ class _MainPageState extends State<MainPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      "DON'T HAVE AN ACCOUNT ? ",
-                      style: TextStyle(
-                          fontSize: 11,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500),
+                    SizedBox(
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.5,
+                      height: 40,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            gradient: const LinearGradient(
+                                colors: [
+                                  Colors.black, //Come back to this
+                                  Colors.black
+                                ],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter)),
+                        child: Material(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(20),
+                            splashColor: Colors.amber,
+                            onTap: () async{
+                              dynamic result = await _auth.signInAnon();
+                              if(result == null){
+                                print("error signing in");
+                              }else{
+                                print("signed in");
+                                print(result);
+                                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> const userBooks()));
+                              }
+                            },
+                            child: const Center(
+                              child: Text(
+                                "Guest",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
